@@ -17,14 +17,17 @@ done
 
 function setup_zsh {
 	#Install zsh
-    	$package_manager install zsh
+  $package_manager install zsh
 
 	#Install Pure
-    	mkdir -p "$HOME/.zsh"
+  mkdir -p "$HOME/.zsh"
 	git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
 
+  #Pull down zshrc file
+  curl https://raw.githubusercontent.com/Reggles44/bash_setup/main/zshrc > ~/.zshrc  
+
 	#Install ohmyzsh
-	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --keep-zshrc
 }
 
 function setup_neovim {
@@ -39,10 +42,9 @@ function help {
 cat << EOF
 Usage: ${0##*/} [-n|--nvim|--neovim] [-z|--zsh] 
 
-    -h          display this help and exit
-    -f OUTFILE  write the result to OUTFILE instead of standard output.
-    -v          verbose mode. Can be used multiple times for increased
-                verbosity.
+    --help        display this help and exit
+    --neovim      Setup NeoVim and NvChad
+    --zsh         Setup ZSH, Oh-My-ZSH, Pure Prompt and download premade .zshrc
 EOF
 }
 
