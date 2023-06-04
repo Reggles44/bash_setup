@@ -1,0 +1,7 @@
+#Ignore Everything
+*
+
+# but these files
+!.gitignore
+!setup.sh
+!zshrc
