@@ -1,8 +1,8 @@
 #!/bin/bash
-apt update -y
-ape upgrade -y
+sudo apt update -y
+sudo ape upgrade -y
 
-apt install -U python3
+sudo apt install python3
 python3 -m pip install -U ansible
 
 TEMP="/tmp/wsl_ansible_setup.yml"
