@@ -1,0 +1,73 @@
+---
+
+- hosts: localhost
+  become: yes
+  vars:
+    - user: 'rbeakes'
+    - wsl_home: '/home/rbeakes' 
+  tasks:
+    - name: "Install System Packages"
+      apt:
+        name:
+         - git
+         - neovim
+         - nodejs
+         - npm
+         - zsh
+        state: latest
+
+    - name: "PyEnv"
+      git:
+        repo: https://github.com/pyenv/pyenv.git
+        dest: "{{ wsl_home }}/.pyenv"
+        clone: yes
+        update: yes
+
+    - name: "Exports & Alias'"
+      blockinfile:
+        path: "{{ wsl_home }}/.zshrc"
+        block: |
+          export PATH=$HOME/bin:$PATH
+          export AWS_DEFAULT_REGION="us-east-1"
+          export DOCKER_DEFAULT_PLATFORM="linux/amd64"
+          export LC_ALL="en_US.utf_8"
+          export LANG="en_US.utf_8"
+          export PYTHONWARNINGS="ignore"
+
+          alias dc="docker compose"
+          alias dcrun="docker compoase run --rm --no-deps"
+          alias zshconfig="vim .zshrc" 
+          alias vim="nvim"3
+        marker: '# {mark} ANSIBLE MANAGED BLOCK - Exports and Alias'
+        insertafter: EOF
+        create: yes
+
+    - name: "Clone Pure Prompt"
+      git: 
+        repo: https://github.com/sindresorhus/pure.git 
+        dest: "{{ wsl_home }}/.zsh/pure"
+        clone: yes
+        update: yes
+    
+    - name: "Add Pure Prompt to .zshrc"
+      blockinfile:
+        path: "{{ wsl_home }}/.zshrc"
+        block: |
+          fpath+=($HOME/.zsh/pure)
+          autoload -U promptinit; promptinit
+          zstyle :prompt:pure:path color cyan
+          zstyle :prompt:pure:prompt:success color green
+          zstyle :prompt:pure:prompt:error color red
+          zstyle :prompt:pure:git:stash show yes
+          prompt pure
+        marker: '# {mark} ANSIBLE MANAGED BLOCK - Pure Prompt'
+        insertafter: EOF
+        create: yes
+
+    - name: "NvChad"
+      git:
+        repo: https://github.com/NvChad/NvChad 
+        dest: "{{ wsl_home }}/.config/nvim"
+        depth: 1
+        clone: yes
+        update: yes

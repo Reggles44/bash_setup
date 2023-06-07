@@ -4,5 +4,5 @@
 # but these files
 !.gitignore
 !setup.sh
-!zshrc
+!setup.yml
 !README.md
